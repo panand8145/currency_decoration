@@ -3,6 +3,8 @@ library currency_formatter;
 import 'package:intl/intl.dart';
 import 'package:universal_io/io.dart' show Platform;
 
+import 'currency_formatter/currency_symbol.dart';
+
 abstract class CurrencyFormatter {
   static final Map<num, String> _letters = {
     1000000000000: 'T',
@@ -58,8 +60,9 @@ abstract class CurrencyFormatter {
         for (int i = 0; i < oldNum.length; i++) {
           number = oldNum[oldNum.length - i - 1] + number;
           if ((i + 1) % 3 == 0 &&
-              i < oldNum.length - (oldNum.startsWith('-') ? 2 : 1))
+              i < oldNum.length - (oldNum.startsWith('-') ? 2 : 1)) {
             number = settings.thousandSeparator! + number;
+          }
         }
       }
     }
@@ -176,10 +179,8 @@ class CurrencyFormatterSettings {
       this.thousandSeparator,
       this.decimalSeparator,
       this.symbolSeparator = ' '}) {
-    if (this.thousandSeparator == null)
-      this.thousandSeparator = this.symbolSide == SymbolSide.left ? ',' : '.';
-    if (this.decimalSeparator == null)
-      this.decimalSeparator = this.symbolSide == SymbolSide.left ? '.' : ',';
+    thousandSeparator ??= symbolSide == SymbolSide.left ? ',' : '.';
+    decimalSeparator ??= symbolSide == SymbolSide.left ? '.' : ',';
   }
 
   // Returns the same [CurrencyFormatterSettings] but with some changed parameters.
@@ -273,6 +274,3 @@ class CurrencyFormatterSettings {
   static final CurrencyFormatterSettings ron =
       CurrencyFormatterSettings(symbol: 'L', symbolSide: SymbolSide.right);
 }
-
-/// Enumeration for the three possibilities when writing the currency symbol.
-enum SymbolSide { left, right, none }
