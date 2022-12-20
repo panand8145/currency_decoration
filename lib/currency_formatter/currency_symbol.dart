@@ -1,7 +1,16 @@
 /// Enumeration for the three possibilities when writing the currency symbol.
 enum SymbolSide { left, right, none }
 
+enum FractionalStyle { none, strike, cross, disable, ignore }
+
+/// e.g. style1:   i/p 1552470.596   o/p 1,552,470.596
+/// e.g. style2:   i/p 1552470.596   o/p 15,52,470.596
+enum CommaStyle { none, style1, style2 }
+
 class CurrencySymbol {
+// none: remove symbol
+  static const String none = "";
+
 // Afghanistani Afghani
   static const String AFN = "؋";
 
@@ -145,197 +154,4 @@ class CurrencySymbol {
 
 // Costa Rican Colon
   static const String CRC = "₡";
-}
-
-enum _CurrencySymbol {
-  // Afghanistani Afghani
-  //  ؋
-  AFN,
-
-  // Armenian Dram
-  //  դր
-  AMD,
-
-  // Azerbaijani Manat
-  //  ₼
-  AZN,
-
-  // Bahraini Dinar
-  //  .د.ب
-  BHD,
-
-  // Bangladeshi Taka
-  //  ৳
-  BDT,
-
-  // Cambodian Riel
-  //  ៛
-  KHR,
-
-  // Chinese Yuan Renminbi
-  //  元
-  CNY,
-
-  // Georgian Lari
-  //  ლ
-  GEL,
-
-  // Indian Rupee
-  //  ₹
-  INR,
-
-  // Iranian Rial
-  //  ﷼
-  IRR,
-
-  // Iraqi Dinar
-  //  ع.د
-  IQD,
-
-  // Israeli New Sheqel
-  //  ₪
-  ILS,
-
-  // Japanese Yen
-  //  ¥
-  JPY,
-
-  // Jordanian Dinar
-  JOD, //  د.ا
-
-  // Kazakhstani Tenge
-  //  лв
-  KZT,
-
-  // Kuwaiti Dinar
-  //  د.ك
-  KWD,
-
-  // Kyrgyzstani Som
-  //  лв
-  KGS,
-
-  // Lao Kip
-  //  ₭
-  LAK,
-
-  // Mongolian Tugrik
-  //  ₮
-  MNT,
-
-  // North Korean Won
-  //  ₩
-  KPW,
-
-  // Omani Rial
-  //  ﷼
-  OMR,
-
-  // Philippine Peso
-  //  ₱
-  PHP,
-
-  // Qatari Riyal
-  //  ﷼
-  QAR,
-
-  // Russian Ruble
-  //  ₽
-  RUB,
-
-  // Saudi Arabian Riyal
-  //  ﷼
-  SAR,
-
-  // Korean Won
-  //  ₩
-  KRW,
-
-  // Thai Baht
-  //  ฿
-  THB,
-
-  // United States Dollar
-  //  $
-  USD,
-
-  // Turkish New Lira
-  //  ₺
-  TRY,
-
-  // United Arab Emirates Dirham
-  //  د.إ
-  AED,
-
-  // Uzbekistani Som
-  //  лв
-  UZS,
-
-  // Viet Nam Dong
-  //  ₫
-  VND,
-
-  // Yemeni Rial
-  //  ﷼
-  YER,
-
-  // Algerian Dinar
-  //  دج
-  DZD,
-
-  // Eritrean Nakfa
-  //  ናቕፋ
-  ERN,
-
-  // Ethiopian Birr
-  //  ብር
-  ETB,
-
-  // Libyan Dinar
-  //  ل.د
-  LYD,
-
-  // Nigerian Naira
-  //  ₦
-  NGN,
-
-  // Tunisian Dinar
-  //  د.ت
-  TND,
-
-  // European Euro
-  //  €
-  EUR,
-
-  // Bulgarian Lev
-  //  лв
-  BGN,
-
-  // Macedonian Denar
-  //  ден
-  MKD,
-
-  // Maltese Lira
-  //  ₤
-  MTL,
-
-  // Polish Zloty
-  //  zł
-  PLN,
-
-  // Serbian Dinar
-  //  Дин.
-  RSD,
-
-  // Ukrainian Hryvnia
-  //  ₴
-  UAH,
-
-  // United Kingdom Pound Sterling
-  //  £
-  GBP,
-
-  // Costa Rican Colon
-  //  ₡
-  CRC,
 }

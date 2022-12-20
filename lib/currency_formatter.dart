@@ -1,8 +1,5 @@
 library currency_formatter;
 
-import 'package:intl/intl.dart';
-import 'package:universal_io/io.dart' show Platform;
-
 import 'currency_formatter/currency_symbol.dart';
 
 abstract class CurrencyFormatter {
@@ -57,8 +54,11 @@ abstract class CurrencyFormatter {
             ? settings.decimalSeparator! +
                 number.split(settings.decimalSeparator!)[1]
             : '';
+        print("OldNumber $oldNum");
         for (int i = 0; i < oldNum.length; i++) {
+          print("* ${oldNum[oldNum.length - i - 1]} + $number");
           number = oldNum[oldNum.length - i - 1] + number;
+          print("--------------- $number");
           if ((i + 1) % 3 == 0 &&
               i < oldNum.length - (oldNum.startsWith('-') ? 2 : 1)) {
             number = settings.thousandSeparator! + number;
@@ -66,6 +66,10 @@ abstract class CurrencyFormatter {
         }
       }
     }
+    print(settings.symbol);
+    print(settings.symbolSeparator);
+    print(number);
+    print(letter);
     switch (settings.symbolSide) {
       case SymbolSide.left:
         return '${settings.symbol}${settings.symbolSeparator}$number$letter';
@@ -98,58 +102,6 @@ abstract class CurrencyFormatter {
         _letters.keys
             .firstWhere((e) => _letters[e] == _letter, orElse: () => 1);
   }
-
-  /// Map that contains the [CurrencyFormatterSettings] from major currencies.
-  /// They can be accessed using their abbreviation. e.g. `majors['usd']`.
-  static final Map<String, CurrencyFormatterSettings> majors = {
-    'usd': CurrencyFormatterSettings.usd,
-    'eur': CurrencyFormatterSettings.eur,
-    'jpy': CurrencyFormatterSettings.jpy,
-    'gbp': CurrencyFormatterSettings.gbp,
-    'chf': CurrencyFormatterSettings.chf,
-    'cny': CurrencyFormatterSettings.cny,
-    'sek': CurrencyFormatterSettings.sek,
-    'krw': CurrencyFormatterSettings.krw,
-    'inr': CurrencyFormatterSettings.inr,
-    'rub': CurrencyFormatterSettings.rub,
-    'zar': CurrencyFormatterSettings.zar,
-    'try': CurrencyFormatterSettings.tryx,
-    'pln': CurrencyFormatterSettings.pln,
-    'thb': CurrencyFormatterSettings.thb,
-    'idr': CurrencyFormatterSettings.idr,
-    'huf': CurrencyFormatterSettings.huf,
-    'czk': CurrencyFormatterSettings.czk,
-    'ils': CurrencyFormatterSettings.ils,
-    'php': CurrencyFormatterSettings.php,
-    'myr': CurrencyFormatterSettings.myr,
-    'ron': CurrencyFormatterSettings.ron
-  };
-
-  /// Map that contains the symbols from major currencies.
-  /// They can be accessed using their abbreviation. e.g. `majorSymbols['usd']`.
-  static const Map<String, String> majorSymbols = {
-    'usd': '\$',
-    'eur': '€',
-    'jpy': '¥',
-    'gbp': '£',
-    'chf': 'fr',
-    'cny': '元',
-    'sek': 'kr',
-    'krw': '₩',
-    'inr': '₹',
-    'rub': '₽',
-    'zar': 'R',
-    'try': '₺',
-    'pln': 'zł',
-    'thb': '฿',
-    'idr': 'Rp',
-    'huf': 'Ft',
-    'czk': 'Kč',
-    'ils': '₪',
-    'php': '₱',
-    'myr': 'RM',
-    'ron': 'L'
-  };
 }
 
 /// This class contains the formatting settings for a currency.
@@ -197,80 +149,4 @@ class CurrencyFormatterSettings {
           thousandSeparator: thousandSeparator ?? this.thousandSeparator,
           decimalSeparator: decimalSeparator ?? this.decimalSeparator,
           symbolSeparator: symbolSeparator ?? this.symbolSeparator);
-
-  /// Get the [CurrencyFormatterSettings] of a currency using its symbol.
-  static CurrencyFormatterSettings? fromSymbol(String symbol) {
-    for (int i = 0; i < CurrencyFormatter.majorSymbols.length; i++) {
-      if (CurrencyFormatter.majorSymbols.values.elementAt(i) == symbol)
-        return CurrencyFormatter.majors.values.elementAt(i);
-    }
-    return null;
-  }
-
-  /// Get the [CurrencyFormatterSettings] of the local currency.
-  static CurrencyFormatterSettings? get local => fromSymbol(
-      NumberFormat.simpleCurrency(locale: Platform.localeName).currencySymbol);
-
-  static final CurrencyFormatterSettings usd =
-      CurrencyFormatterSettings(symbol: '\$', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings eur =
-      CurrencyFormatterSettings(symbol: '€', symbolSide: SymbolSide.right);
-
-  static final CurrencyFormatterSettings jpy =
-      CurrencyFormatterSettings(symbol: '¥', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings gbp =
-      CurrencyFormatterSettings(symbol: '£', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings chf =
-      CurrencyFormatterSettings(symbol: 'fr', symbolSide: SymbolSide.right);
-
-  static final CurrencyFormatterSettings cny =
-      CurrencyFormatterSettings(symbol: '元', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings sek =
-      CurrencyFormatterSettings(symbol: 'kr', symbolSide: SymbolSide.right);
-
-  static final CurrencyFormatterSettings krw =
-      CurrencyFormatterSettings(symbol: '₩', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings inr =
-      CurrencyFormatterSettings(symbol: '₹', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings rub =
-      CurrencyFormatterSettings(symbol: '₽', symbolSide: SymbolSide.right);
-
-  static final CurrencyFormatterSettings zar =
-      CurrencyFormatterSettings(symbol: 'R', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings tryx =
-      CurrencyFormatterSettings(symbol: '₺', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings pln =
-      CurrencyFormatterSettings(symbol: 'zł', symbolSide: SymbolSide.right);
-
-  static final CurrencyFormatterSettings thb =
-      CurrencyFormatterSettings(symbol: '฿', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings idr =
-      CurrencyFormatterSettings(symbol: 'Rp', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings huf =
-      CurrencyFormatterSettings(symbol: 'Ft', symbolSide: SymbolSide.right);
-
-  static final CurrencyFormatterSettings czk =
-      CurrencyFormatterSettings(symbol: 'Kč', symbolSide: SymbolSide.right);
-
-  static final CurrencyFormatterSettings ils =
-      CurrencyFormatterSettings(symbol: '₪', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings php =
-      CurrencyFormatterSettings(symbol: '₱', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings myr =
-      CurrencyFormatterSettings(symbol: 'RM', symbolSide: SymbolSide.left);
-
-  static final CurrencyFormatterSettings ron =
-      CurrencyFormatterSettings(symbol: 'L', symbolSide: SymbolSide.right);
 }

@@ -4,7 +4,7 @@ import 'currency_formatter.dart';
 import 'currency_formatter/currency_symbol.dart';
 
 class CurrencyDecoration extends StatelessWidget {
-  /// Amount
+  /// Amount. e.g. 52450.6998
   final double amount;
 
   /// Symbol of the currency. e.g. '€'
@@ -37,20 +37,51 @@ class CurrencyDecoration extends StatelessWidget {
     this.decimalSeparator,
     this.symbolSeparator,
     this.compact,
+    this.primaryTextStyle,
+    this.commaStyle,
+    this.secondaryTextStyle,
+    this.fractionalStyle,
+    this.fractionalOpacity,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final CurrencyFormatterSettings euroSettings = CurrencyFormatterSettings(
-        // formatter settings for euro
-        symbol: symbol,
-        symbolSide: symbolSide ?? SymbolSide.left,
-        thousandSeparator: '.',
-        decimalSeparator: ',',
-        symbolSeparator: ' ');
-    final String formatted = CurrencyFormatter.format(amount, euroSettings,
+    final CurrencyFormatterSettings currencyFormatterSettings =
+        CurrencyFormatterSettings(
+            // formatter settings for euro
+            symbol: symbol,
+            symbolSide: symbolSide ?? SymbolSide.left,
+            thousandSeparator: ',',
+            decimalSeparator: '.',
+            symbolSeparator: ' ');
+    final String formatted = CurrencyFormatter.format(
+        amount, currencyFormatterSettings,
         compact: compact ?? false); // 1.910,93 €
-    return Text(formatted);
+
+    final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
+    TextStyle? effectiveTextStyle = primaryTextStyle;
+    if (primaryTextStyle == null) {
+      effectiveTextStyle = defaultTextStyle.style.merge(primaryTextStyle);
+    }
+
+    return Text(
+      formatted,
+    );
   }
+
+  /// Text style apply on whole units/value (e.g. 52470.596 then text style apply on 52470)
+  final TextStyle? primaryTextStyle;
+
+  /// Whole units/value comma style
+  final CommaStyle? commaStyle;
+
+  /// Text style apply on fractional part (e.g. 52470.596 then text style apply on 596)
+  final TextStyle? secondaryTextStyle;
+
+  /// Style on fractional part/value
+  final FractionalStyle? fractionalStyle;
+
+  /// Style on fractional part/value
+  final double? fractionalOpacity;
 }
