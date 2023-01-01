@@ -10,6 +10,10 @@ class CurrencyDecoration extends StatelessWidget {
   /// Symbol of the currency. e.g. '€'
   final String symbol;
 
+  /// If [enforceDecimals] is set to `true`, decimals will be shown even if it is an integer.
+  /// e.g. `'$ 5.00'` instead of `'$ 5'`.
+  final bool enforceDecimals;
+
   /// Whether the symbol is shown before or after the money value, or if it is not shown at all.
   /// e.g. $ 125 ([SymbolPosition.left]) or 125 € ([SymbolPosition.right]).
   final SymbolSide? symbolSide;
@@ -29,19 +33,33 @@ class CurrencyDecoration extends StatelessWidget {
   /// If [compact] is `true` the compact form will be used. e.g. `'$ 1.23K'` instead of `'$ 1,230'`.
   final bool? compact;
 
+  /// If [showThousandSeparator] is set to `false`, the thousand separator won't be shown.
+  /// e.g. `'$ 1200'`instead of `'$ 1,200'`.
+  final bool? showThousandSeparator;
+
+  /// Examples:
+  /// ```dart
+  /// 1.toStringAsFixed(3);  // 1.000
+  /// (4321.12345678).toStringAsFixed(3);  // 4321.123
+  final int? fractionDigits;
+
   const CurrencyDecoration({
     required this.amount,
     required this.symbol,
     this.symbolSide,
     this.thousandSeparator,
     this.decimalSeparator,
-    this.symbolSeparator,
+    this.symbolSeparator = ' ',
+    this.enforceDecimals = false,
+    this.showThousandSeparator = true,
     this.compact,
     this.primaryTextStyle,
-    this.commaStyle,
+    this.currencyValuePlaceStyle,
     this.secondaryTextStyle,
+    this.symbolTextStyle,
     this.fractionalStyle,
     this.fractionalOpacity,
+    this.fractionDigits,
     Key? key,
   }) : super(key: key);
 
@@ -49,24 +67,55 @@ class CurrencyDecoration extends StatelessWidget {
   Widget build(BuildContext context) {
     final CurrencyFormatterSettings currencyFormatterSettings =
         CurrencyFormatterSettings(
-            // formatter settings for euro
             symbol: symbol,
             symbolSide: symbolSide ?? SymbolSide.left,
-            thousandSeparator: ',',
-            decimalSeparator: '.',
-            symbolSeparator: ' ');
-    final String formatted = CurrencyFormatter.format(
+            thousandSeparator: thousandSeparator ?? ',',
+            decimalSeparator: decimalSeparator ?? '.');
+    final formatted = CurrencyFormatter.format(
         amount, currencyFormatterSettings,
+        enforceDecimals: enforceDecimals,
+        fractionDigits: fractionDigits ?? 2,
+        currencyPlaceValueStyle: currencyValuePlaceStyle,
+        showThousandSeparator: showThousandSeparator,
         compact: compact ?? false); // 1.910,93 €
 
     final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
-    TextStyle? effectiveTextStyle = primaryTextStyle;
-    if (primaryTextStyle == null) {
-      effectiveTextStyle = defaultTextStyle.style.merge(primaryTextStyle);
-    }
-
-    return Text(
-      formatted,
+    // Primary Text Style
+    final TextStyle primeTextStyle = primaryTextStyle == null
+        ? defaultTextStyle.style
+        : defaultTextStyle.style.merge(primaryTextStyle);
+    // Secondary Text Style
+    final TextStyle secondTextStyle = primaryTextStyle == null
+        ? defaultTextStyle.style
+        : defaultTextStyle.style.merge(secondaryTextStyle);
+    // Symbol Style
+    final TextStyle symTextStyle = symbolTextStyle == null
+        ? symbolSide == SymbolSide.left
+            ? primeTextStyle
+            : secondTextStyle
+        : defaultTextStyle.style.merge(symbolTextStyle);
+    return Text.rich(
+      TextSpan(text: null, children: <InlineSpan>[
+        if (symbolSide == SymbolSide.left && symbol.isNotEmpty)
+          TextSpan(
+            text: "$symbol$symbolSeparator",
+            style: primeTextStyle,
+          ),
+        TextSpan(
+          text: formatted[0],
+          style: primeTextStyle,
+        ),
+        if (formatted[1].isNotEmpty)
+          TextSpan(
+            text: "${decimalSeparator ?? '.'}${formatted[1]}",
+            style: secondTextStyle,
+          ),
+        if (symbolSide == SymbolSide.right && symbol.isNotEmpty)
+          TextSpan(
+            text: "$symbolSeparator$symbol",
+            style: symTextStyle,
+          ),
+      ]),
     );
   }
 
@@ -74,10 +123,13 @@ class CurrencyDecoration extends StatelessWidget {
   final TextStyle? primaryTextStyle;
 
   /// Whole units/value comma style
-  final CommaStyle? commaStyle;
+  final CurrencyValuePlaceStyle? currencyValuePlaceStyle;
 
   /// Text style apply on fractional part (e.g. 52470.596 then text style apply on 596)
   final TextStyle? secondaryTextStyle;
+
+  /// Text style apply on Currency Symbol
+  final TextStyle? symbolTextStyle;
 
   /// Style on fractional part/value
   final FractionalStyle? fractionalStyle;

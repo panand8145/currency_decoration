@@ -5,7 +5,7 @@ enum FractionalStyle { none, strike, cross, disable, ignore }
 
 /// e.g. style1:   i/p 1552470.596   o/p 1,552,470.596
 /// e.g. style2:   i/p 1552470.596   o/p 15,52,470.596
-enum CommaStyle { none, style1, style2 }
+enum CurrencyValuePlaceStyle { none, style1, style2 }
 
 class CurrencySymbol {
 // none: remove symbol

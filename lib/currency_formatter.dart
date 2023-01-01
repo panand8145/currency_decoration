@@ -1,5 +1,7 @@
 library currency_formatter;
 
+import 'package:intl/intl.dart';
+
 import 'currency_formatter/currency_symbol.dart';
 
 abstract class CurrencyFormatter {
@@ -22,14 +24,21 @@ abstract class CurrencyFormatter {
   ///
   /// If [enforceDecimals] is set to `true`, decimals will be shown even if it is an integer.
   /// e.g. `'$ 5.00'` instead of `'$ 5'`.
-  static String format(amount, CurrencyFormatterSettings settings,
+  ///
+  /// Currency value place [currencyPlaceStyle] is style how currency look like
+  /// e.g. style1:   i/p 1552470.596   o/p 1,552,470.596
+  /// e.g. style2:   i/p 1552470.596   o/p 15,52,470.596
+  ///
+  static List<String> format(amount, CurrencyFormatterSettings settings,
       {bool compact = false,
-      int decimal = 2,
+      int fractionDigits = 2,
       showThousandSeparator = true,
+      currencyPlaceValueStyle,
       enforceDecimals = false}) {
     amount = double.parse('$amount');
-    late String number;
+    late String numberUnit;
     String letter = '';
+    String decimalUnit = '';
 
     if (compact) {
       for (int i = 0; i < _letters.length; i++) {
@@ -39,10 +48,32 @@ abstract class CurrencyFormatter {
           break;
         }
       }
-      number = amount.toStringAsPrecision(3);
-      number = number.replaceAll('.', settings.decimalSeparator!);
+      numberUnit = amount.toStringAsPrecision(3);
+      numberUnit = numberUnit.replaceAll('.', settings.decimalSeparator!);
     } else {
-      number = amount.toStringAsFixed(decimal);
+      numberUnit = "$amount";
+
+      if (!showThousandSeparator) {
+        settings.thousandSeparator = "";
+      }
+
+      if (currencyPlaceValueStyle == CurrencyValuePlaceStyle.style1) {
+        //final f = NumberFormat("#,##,###,###.00");
+        final f = NumberFormat(
+            "#${settings.thousandSeparator!}##${settings.thousandSeparator!}###${settings.thousandSeparator!}###${settings.decimalSeparator!}${List.generate(fractionDigits, (index) => "0").join('')}");
+        numberUnit = (f.format(amount)).split(".")[0];
+        decimalUnit = (f.format(amount)).split(".")[1];
+      } else if (currencyPlaceValueStyle == CurrencyValuePlaceStyle.style2) {
+        //final f = NumberFormat("##,##,##,###.00");
+        final f = NumberFormat(
+            "##${settings.thousandSeparator!}##${settings.thousandSeparator!}##${settings.thousandSeparator!}###${settings.decimalSeparator!}${List.generate(fractionDigits, (index) => "0").join('')}");
+        numberUnit = (f.format(amount)).split(".")[0];
+        decimalUnit = (f.format(amount)).split(".")[1];
+      }
+
+      // -------
+      // number = amount.toStringAsFixed(fractionDigits);
+      /*number = amount.toStringAsFixed(fractionDigits);
       if (!enforceDecimals &&
           double.parse(number) == double.parse(number).round()) {
         number = double.parse(number).round().toString();
@@ -54,29 +85,25 @@ abstract class CurrencyFormatter {
             ? settings.decimalSeparator! +
                 number.split(settings.decimalSeparator!)[1]
             : '';
-        print("OldNumber $oldNum");
+        decimalValue = number.replaceAll('.', '');
+        number = "";
         for (int i = 0; i < oldNum.length; i++) {
-          print("* ${oldNum[oldNum.length - i - 1]} + $number");
           number = oldNum[oldNum.length - i - 1] + number;
-          print("--------------- $number");
           if ((i + 1) % 3 == 0 &&
               i < oldNum.length - (oldNum.startsWith('-') ? 2 : 1)) {
             number = settings.thousandSeparator! + number;
           }
         }
-      }
+      }*/
     }
-    print(settings.symbol);
-    print(settings.symbolSeparator);
-    print(number);
-    print(letter);
+
     switch (settings.symbolSide) {
       case SymbolSide.left:
-        return '${settings.symbol}${settings.symbolSeparator}$number$letter';
+        return ['$numberUnit$letter', decimalUnit];
       case SymbolSide.right:
-        return '$number$letter${settings.symbolSeparator}${settings.symbol}';
+        return ['$numberUnit$letter', decimalUnit];
       default:
-        return '$number$letter';
+        return ['$numberUnit$letter', decimalUnit];
     }
   }
 
@@ -86,21 +113,19 @@ abstract class CurrencyFormatter {
         .replaceFirst(settings.thousandSeparator ?? '', '')
         .replaceFirst(settings.decimalSeparator ?? '', '.')
         .replaceFirst(settings.symbol, '')
-        .replaceFirst(settings.symbolSeparator, '')
         .trim();
 
-    String _letter = '';
+    String letter = '';
     for (String letter in _letters.values) {
       if (txt.endsWith(letter)) {
         txt = txt.replaceFirst(letter, '');
-        _letter = letter;
+        letter = letter;
         break;
       }
     }
 
     return num.parse(txt) *
-        _letters.keys
-            .firstWhere((e) => _letters[e] == _letter, orElse: () => 1);
+        _letters.keys.firstWhere((e) => _letters[e] == letter, orElse: () => 1);
   }
 }
 
@@ -121,16 +146,11 @@ class CurrencyFormatterSettings {
   /// It defaults to `'.'` for [SymbolSide.left] and to `','` for [SymbolSide.right].
   String? decimalSeparator;
 
-  /// Character(s) between the number and the currency symbol. e.g. $ 9.10 (`' '`) or $9.10 (`''`).
-  /// It defaults to a normal space (`' '`).
-  String symbolSeparator;
-
   CurrencyFormatterSettings(
       {required this.symbol,
       this.symbolSide = SymbolSide.left,
       this.thousandSeparator,
-      this.decimalSeparator,
-      this.symbolSeparator = ' '}) {
+      this.decimalSeparator}) {
     thousandSeparator ??= symbolSide == SymbolSide.left ? ',' : '.';
     decimalSeparator ??= symbolSide == SymbolSide.left ? '.' : ',';
   }
@@ -147,6 +167,8 @@ class CurrencyFormatterSettings {
           symbol: symbol ?? this.symbol,
           symbolSide: symbolSide ?? this.symbolSide,
           thousandSeparator: thousandSeparator ?? this.thousandSeparator,
-          decimalSeparator: decimalSeparator ?? this.decimalSeparator,
-          symbolSeparator: symbolSeparator ?? this.symbolSeparator);
+          decimalSeparator: decimalSeparator ?? this.decimalSeparator);
 }
+
+// https://www.woolha.com/tutorials/dart-formatting-currency-with-numberformat
+// print(NumberFormat.simpleCurrency(locale: 'en_IN', decimalDigits: 2).format(15000000)); // 123.456,000 €

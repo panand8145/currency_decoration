@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
@@ -29,10 +29,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final double amount_1 = 1552470.596;
-
   @override
   Widget build(BuildContext context) {
+    const double amount_1 = 789456123.6778;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Currency decoration"),
@@ -40,11 +39,27 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: const <Widget>[
             CurrencyDecoration(
-              symbol: CurrencySymbol.none,
+              symbol: CurrencySymbol.INR,
               amount: amount_1,
+              compact: false,
               symbolSide: SymbolSide.left,
+              fractionDigits: 2,
+              enforceDecimals: false,
+              currencyValuePlaceStyle: CurrencyValuePlaceStyle.style2,
+              primaryTextStyle: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0),
+              secondaryTextStyle: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0),
+              symbolTextStyle: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
