@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  universal_io: ^2.0.4
   intl: ^0.18.0
 
 dev_dependencies:

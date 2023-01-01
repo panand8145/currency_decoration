@@ -1,8 +1,8 @@
 library currency_formatter;
 
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 
-import 'currency_formatter/currency_symbol.dart';
+import 'currency_symbol.dart';
 
 abstract class CurrencyFormatter {
   static final Map<num, String> _letters = {
@@ -36,7 +36,7 @@ abstract class CurrencyFormatter {
       currencyPlaceValueStyle,
       enforceDecimals = false}) {
     amount = double.parse('$amount');
-    late String numberUnit;
+    String numberUnit = "$amount";
     String letter = '';
     String decimalUnit = '';
 
@@ -51,50 +51,21 @@ abstract class CurrencyFormatter {
       numberUnit = amount.toStringAsPrecision(3);
       numberUnit = numberUnit.replaceAll('.', settings.decimalSeparator!);
     } else {
-      numberUnit = "$amount";
-
       if (!showThousandSeparator) {
         settings.thousandSeparator = "";
       }
 
       if (currencyPlaceValueStyle == CurrencyValuePlaceStyle.style1) {
-        //final f = NumberFormat("#,##,###,###.00");
-        final f = NumberFormat(
+        final f = intl.NumberFormat(
             "#${settings.thousandSeparator!}##${settings.thousandSeparator!}###${settings.thousandSeparator!}###${settings.decimalSeparator!}${List.generate(fractionDigits, (index) => "0").join('')}");
         numberUnit = (f.format(amount)).split(".")[0];
         decimalUnit = (f.format(amount)).split(".")[1];
       } else if (currencyPlaceValueStyle == CurrencyValuePlaceStyle.style2) {
-        //final f = NumberFormat("##,##,##,###.00");
-        final f = NumberFormat(
+        final f = intl.NumberFormat(
             "##${settings.thousandSeparator!}##${settings.thousandSeparator!}##${settings.thousandSeparator!}###${settings.decimalSeparator!}${List.generate(fractionDigits, (index) => "0").join('')}");
         numberUnit = (f.format(amount)).split(".")[0];
         decimalUnit = (f.format(amount)).split(".")[1];
       }
-
-      // -------
-      // number = amount.toStringAsFixed(fractionDigits);
-      /*number = amount.toStringAsFixed(fractionDigits);
-      if (!enforceDecimals &&
-          double.parse(number) == double.parse(number).round()) {
-        number = double.parse(number).round().toString();
-      }
-      number = number.replaceAll('.', settings.decimalSeparator!);
-      if (showThousandSeparator) {
-        String oldNum = number.split(settings.decimalSeparator!)[0];
-        number = number.contains(settings.decimalSeparator!)
-            ? settings.decimalSeparator! +
-                number.split(settings.decimalSeparator!)[1]
-            : '';
-        decimalValue = number.replaceAll('.', '');
-        number = "";
-        for (int i = 0; i < oldNum.length; i++) {
-          number = oldNum[oldNum.length - i - 1] + number;
-          if ((i + 1) % 3 == 0 &&
-              i < oldNum.length - (oldNum.startsWith('-') ? 2 : 1)) {
-            number = settings.thousandSeparator! + number;
-          }
-        }
-      }*/
     }
 
     switch (settings.symbolSide) {
@@ -169,6 +140,3 @@ class CurrencyFormatterSettings {
           thousandSeparator: thousandSeparator ?? this.thousandSeparator,
           decimalSeparator: decimalSeparator ?? this.decimalSeparator);
 }
-
-// https://www.woolha.com/tutorials/dart-formatting-currency-with-numberformat
-// print(NumberFormat.simpleCurrency(locale: 'en_IN', decimalDigits: 2).format(15000000)); // 123.456,000 €

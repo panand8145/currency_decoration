@@ -1,5 +1,4 @@
 import 'package:currency_decoration/currency_decoration.dart';
-import 'package:currency_decoration/currency_formatter/currency_symbol.dart';
 import 'package:flutter/material.dart';
 
 void main() {

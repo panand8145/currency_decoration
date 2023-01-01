@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'currency_formatter.dart';
-import 'currency_formatter/currency_symbol.dart';
+import 'currency_symbol.dart';
+
+export 'currency_symbol.dart';
 
 class CurrencyDecoration extends StatelessWidget {
   /// Amount. e.g. 52450.6998
