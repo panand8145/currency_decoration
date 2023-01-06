@@ -48,7 +48,7 @@ class CurrencyDecoration extends StatelessWidget {
   const CurrencyDecoration({
     required this.amount,
     required this.symbol,
-    this.symbolSide,
+    this.symbolSide = SymbolSide.left,
     this.thousandSeparator,
     this.decimalSeparator,
     this.symbolSeparator = ' ',
@@ -60,7 +60,6 @@ class CurrencyDecoration extends StatelessWidget {
     this.secondaryTextStyle,
     this.symbolTextStyle,
     this.fractionalStyle,
-    this.fractionalOpacity,
     this.fractionDigits,
     Key? key,
   }) : super(key: key);
@@ -70,7 +69,6 @@ class CurrencyDecoration extends StatelessWidget {
     final CurrencyFormatterSettings currencyFormatterSettings =
         CurrencyFormatterSettings(
             symbol: symbol,
-            symbolSide: symbolSide ?? SymbolSide.left,
             thousandSeparator: thousandSeparator ?? ',',
             decimalSeparator: decimalSeparator ?? '.');
     final formatted = CurrencyFormatter.format(
@@ -89,19 +87,19 @@ class CurrencyDecoration extends StatelessWidget {
     // Secondary Text Style
     final TextStyle secondTextStyle = primaryTextStyle == null
         ? defaultTextStyle.style
-        : defaultTextStyle.style.merge(secondaryTextStyle);
+        : primaryTextStyle!.merge(secondaryTextStyle);
     // Symbol Style
     final TextStyle symTextStyle = symbolTextStyle == null
         ? symbolSide == SymbolSide.left
             ? primeTextStyle
             : secondTextStyle
-        : defaultTextStyle.style.merge(symbolTextStyle);
+        : primeTextStyle.merge(symbolTextStyle);
     return Text.rich(
       TextSpan(text: null, children: <InlineSpan>[
         if (symbolSide == SymbolSide.left && symbol.isNotEmpty)
           TextSpan(
             text: "$symbol$symbolSeparator",
-            style: primeTextStyle,
+            style: symTextStyle,
           ),
         TextSpan(
           text: formatted[0],
@@ -135,7 +133,4 @@ class CurrencyDecoration extends StatelessWidget {
 
   /// Style on fractional part/value
   final FractionalStyle? fractionalStyle;
-
-  /// Style on fractional part/value
-  final double? fractionalOpacity;
 }
