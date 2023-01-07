@@ -68,10 +68,10 @@ abstract class CurrencyFormatter {
       }
     }
 
-    switch (settings.symbolSide) {
-      case SymbolSide.left:
+    switch (settings.symbolAlign) {
+      case SymbolAlign.left:
         return ['$numberUnit$letter', decimalUnit];
-      case SymbolSide.right:
+      case SymbolAlign.right:
         return ['$numberUnit$letter', decimalUnit];
       default:
         return ['$numberUnit$letter', decimalUnit];
@@ -106,37 +106,37 @@ class CurrencyFormatterSettings {
   String symbol;
 
   /// Whether the symbol is shown before or after the money value, or if it is not shown at all.
-  /// e.g. $ 125 ([SymbolSide.left]) or 125 € ([SymbolSide.right]).
-  SymbolSide symbolSide;
+  /// e.g. $ 125 ([SymbolAlign.left]) or 125 € ([SymbolAlign.right]).
+  SymbolAlign symbolAlign;
 
   /// Thousand separator. e.g. 1,000,000 (`','`) or 1.000.000 (`'.'`). It can be set to any desired [String].
-  /// It defaults to `','` for [SymbolSide.left] and to `'.'` for [SymbolSide.right].
+  /// It defaults to `','` for [SymbolAlign.left] and to `'.'` for [SymbolAlign.right].
   String? thousandSeparator;
 
   /// Decimal separator. e.g. 9.10 (`'.'`) or 9,10 (`','`). It can be set to any desired [String].
-  /// It defaults to `'.'` for [SymbolSide.left] and to `','` for [SymbolSide.right].
+  /// It defaults to `'.'` for [SymbolAlign.left] and to `','` for [SymbolAlign.right].
   String? decimalSeparator;
 
   CurrencyFormatterSettings(
       {required this.symbol,
-      this.symbolSide = SymbolSide.left,
+      this.symbolAlign = SymbolAlign.left,
       this.thousandSeparator,
       this.decimalSeparator}) {
-    thousandSeparator ??= symbolSide == SymbolSide.left ? ',' : '.';
-    decimalSeparator ??= symbolSide == SymbolSide.left ? '.' : ',';
+    thousandSeparator ??= symbolAlign == SymbolAlign.left ? ',' : '.';
+    decimalSeparator ??= symbolAlign == SymbolAlign.left ? '.' : ',';
   }
 
   // Returns the same [CurrencyFormatterSettings] but with some changed parameters.
   CurrencyFormatterSettings copyWith({
     String? symbol,
-    SymbolSide? symbolSide,
+    SymbolAlign? symbolAlign,
     String? thousandSeparator,
     String? decimalSeparator,
     String? symbolSeparator,
   }) =>
       CurrencyFormatterSettings(
           symbol: symbol ?? this.symbol,
-          symbolSide: symbolSide ?? this.symbolSide,
+          symbolAlign: symbolAlign ?? this.symbolAlign,
           thousandSeparator: thousandSeparator ?? this.thousandSeparator,
           decimalSeparator: decimalSeparator ?? this.decimalSeparator);
 }

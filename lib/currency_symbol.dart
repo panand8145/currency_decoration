@@ -1,5 +1,5 @@
 /// Enumeration for the three possibilities when writing the currency symbol.
-enum SymbolSide { left, right, none }
+enum SymbolAlign { left, right }
 
 enum FractionalStyle { none, strike, cross, disable, ignore }
 

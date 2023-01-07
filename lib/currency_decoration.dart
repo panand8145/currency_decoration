@@ -17,15 +17,15 @@ class CurrencyDecoration extends StatelessWidget {
   final bool enforceDecimals;
 
   /// Whether the symbol is shown before or after the money value, or if it is not shown at all.
-  /// e.g. $ 125 ([SymbolPosition.left]) or 125 € ([SymbolPosition.right]).
-  final SymbolSide? symbolSide;
+  /// e.g. $ 125 ([SymbolAlign.left]) or 125 € ([SymbolAlign.right]).
+  final SymbolAlign? symbolAlign;
 
   /// Thousand separator. e.g. 1,000,000 (`','`) or 1.000.000 (`'.'`). It can be set to any desired [String].
-  /// It defaults to `','` for [SymbolSide.left] and to `'.'` for [SymbolSide.right].
+  /// It defaults to `','` for [SymbolAlign.left] and to `'.'` for [SymbolAlign.right].
   final String? thousandSeparator;
 
   /// Decimal separator. e.g. 9.10 (`'.'`) or 9,10 (`','`). It can be set to any desired [String].
-  /// It defaults to `'.'` for [SymbolSide.left] and to `','` for [SymbolSide.right].
+  /// It defaults to `'.'` for [SymbolAlign.left] and to `','` for [SymbolAlign.right].
   final String? decimalSeparator;
 
   /// Character(s) between the number and the currency symbol. e.g. $ 9.10 (`' '`) or $9.10 (`''`).
@@ -45,24 +45,24 @@ class CurrencyDecoration extends StatelessWidget {
   /// (4321.12345678).toStringAsFixed(3);  // 4321.123
   final int? fractionDigits;
 
-  const CurrencyDecoration({
-    required this.amount,
-    required this.symbol,
-    this.symbolSide = SymbolSide.left,
-    this.thousandSeparator,
-    this.decimalSeparator,
-    this.symbolSeparator = ' ',
-    this.enforceDecimals = false,
-    this.showThousandSeparator = true,
-    this.compact,
-    this.primaryTextStyle,
-    this.currencyValuePlaceStyle,
-    this.secondaryTextStyle,
-    this.symbolTextStyle,
-    this.fractionalStyle,
-    this.fractionDigits,
-    Key? key,
-  }) : super(key: key);
+  const CurrencyDecoration(
+      {Key? key,
+      required this.amount,
+      required this.symbol,
+      this.symbolAlign = SymbolAlign.left,
+      this.thousandSeparator,
+      this.decimalSeparator,
+      this.symbolSeparator = '',
+      this.enforceDecimals = false,
+      this.showThousandSeparator = true,
+      this.compact,
+      this.primaryTextStyle,
+      this.currencyValuePlaceStyle,
+      this.secondaryTextStyle,
+      this.symbolTextStyle,
+      this.fractionalStyle,
+      this.fractionDigits})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,13 +90,14 @@ class CurrencyDecoration extends StatelessWidget {
         : primaryTextStyle!.merge(secondaryTextStyle);
     // Symbol Style
     final TextStyle symTextStyle = symbolTextStyle == null
-        ? symbolSide == SymbolSide.left
+        ? symbolAlign == SymbolAlign.left
             ? primeTextStyle
             : secondTextStyle
         : primeTextStyle.merge(symbolTextStyle);
     return Text.rich(
+      key: key,
       TextSpan(text: null, children: <InlineSpan>[
-        if (symbolSide == SymbolSide.left && symbol.isNotEmpty)
+        if (symbolAlign == SymbolAlign.left && symbol.isNotEmpty)
           TextSpan(
             text: "$symbol$symbolSeparator",
             style: symTextStyle,
@@ -110,7 +111,7 @@ class CurrencyDecoration extends StatelessWidget {
             text: "${decimalSeparator ?? '.'}${formatted[1]}",
             style: secondTextStyle,
           ),
-        if (symbolSide == SymbolSide.right && symbol.isNotEmpty)
+        if (symbolAlign == SymbolAlign.right && symbol.isNotEmpty)
           TextSpan(
             text: "$symbolSeparator$symbol",
             style: symTextStyle,
