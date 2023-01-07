@@ -21,11 +21,11 @@ class CurrencyDecoration extends StatelessWidget {
   final SymbolAlign? symbolAlign;
 
   /// Thousand separator. e.g. 1,000,000 (`','`) or 1.000.000 (`'.'`). It can be set to any desired [String].
-  /// It defaults to `','` for [SymbolAlign.left] and to `'.'` for [SymbolAlign.right].
+  /// It defaults to `','`.
   final String? thousandSeparator;
 
   /// Decimal separator. e.g. 9.10 (`'.'`) or 9,10 (`','`). It can be set to any desired [String].
-  /// It defaults to `'.'` for [SymbolAlign.left] and to `','` for [SymbolAlign.right].
+  /// It defaults to `'.'`.
   final String? decimalSeparator;
 
   /// Character(s) between the number and the currency symbol. e.g. $ 9.10 (`' '`) or $9.10 (`''`).
@@ -39,8 +39,6 @@ class CurrencyDecoration extends StatelessWidget {
   /// e.g. `'$ 1200'`instead of `'$ 1,200'`.
   final bool? showThousandSeparator;
 
-  /// Examples:
-  /// ```dart
   /// 1.toStringAsFixed(3);  // 1.000
   /// (4321.12345678).toStringAsFixed(3);  // 4321.123
   final int? fractionDigits;
