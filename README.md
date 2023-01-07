@@ -13,13 +13,13 @@ and the Flutter guide for
 
 ## currency_decoration
 
-A package to easily format money with custom UI. It support setting a custom currency symbol and format.  
+A package to easily format money with custom UI. It support setting a custom currency symbol and format.
 
 ## Preview
 https://github.com/panand8145/currency_decoration/blob/main/currency_decoration_1.jpg
 
 ## Installation
-Add `currency_decoration` as a [dependency in your pubspec.yaml file](https://docs.flutter.dev/development/packages-and-plugins/using-packages). 
+Add `currency_decoration` as a [dependency in your pubspec.yaml file](https://docs.flutter.dev/development/packages-and-plugins/using-packages).
 
 ```yaml  
 dependencies:
@@ -28,8 +28,8 @@ dependencies:
 
 ## Features
 
-* To format money 
-* To define money format in Intertional or indian currency format style
+* To format money
+* To define money format in International or indian currency format style
 * To decorate widget style
 * To add custom currency symbol or prefix symbol at starting or ending position
 * To add currency compat (e.g. '$ 1.23K' or of '$ 1,230')
@@ -136,7 +136,7 @@ CurrencyDecoration(
 | `fractionalStyle` | Style on fractional part/value |
 | `fractionDigits` | fractional value |
 
-Parameters marked with * are mandatory to give value. 
+Parameters marked with * are mandatory to give value.
 
 ## MIT License
 
