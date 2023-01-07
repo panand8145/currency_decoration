@@ -26,14 +26,6 @@ dependencies:
     currency_decoration: ^1.0.0
 ```  
 
-## Features
-
-* To format money
-* To define money format in International or indian currency format style
-* To decorate widget style
-* To add custom currency symbol or prefix symbol at starting or ending position
-* To add currency compat (e.g. '$ 1.23K' or of '$ 1,230')
-
 ## Usage
 
 ```dart
