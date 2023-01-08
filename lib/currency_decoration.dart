@@ -55,7 +55,7 @@ class CurrencyDecoration extends StatelessWidget {
       this.showThousandSeparator = true,
       this.compact,
       this.primaryTextStyle,
-      this.currencyValuePlaceStyle,
+      this.currencyValuePlaceStyle = CurrencyValuePlaceStyle.style1,
       this.secondaryTextStyle,
       this.symbolTextStyle,
       this.fractionalStyle,
