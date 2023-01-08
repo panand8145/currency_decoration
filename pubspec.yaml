@@ -1,6 +1,6 @@
 name: currency_decoration
 description: A package to easily format money with custom UI. It support setting a custom currency symbol and format.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/panand8145/currency_decoration
 documentation: https://github.com/panand8145/currency_decoration
 
