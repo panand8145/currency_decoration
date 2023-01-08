@@ -25,7 +25,7 @@ Add `currency_decoration` as a [dependency in your pubspec.yaml file](https://do
 
 ```yaml  
 dependencies:
-    currency_decoration: ^1.0.0
+    currency_decoration: <latest-version>
 ```  
 
 
