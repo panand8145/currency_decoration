@@ -13,7 +13,7 @@ and the Flutter guide for
 
 ## currency_decoration
 
-A package to easily format money with custom UI. It support setting a custom currency symbol and format.
+A package that provides an easy way to format currency with a custom style.
 
 
 
@@ -25,7 +25,7 @@ Add `currency_decoration` as a [dependency in your pubspec.yaml file](https://do
 
 ```yaml  
 dependencies:
-    currency_decoration: <latest-version>
+    currency_decoration: ^1.0.1+1
 ```  
 
 
