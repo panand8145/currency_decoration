@@ -137,7 +137,7 @@ Parameters marked with * are mandatory to give value.
 ## MIT License
 
 ```
-Copyright (c) 2018 Anand Patel
+Copyright (c) 2023 Anand Patel
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
